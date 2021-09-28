@@ -11,8 +11,9 @@ def upload_blob_f(container, file, index=0, result=None):
         result = [None]
 
     try:
+        print("hi2")
         print(file.rsplit('\\', 2)[-2])
-        blob_name = "testraw2/"+f.rsplit('\\', 2)[-2]+"/"+''.join(os.path.splitext(os.path.basename(file)))
+        blob_name = "historical_files/"+file.rsplit('\\', 2)[-2]+"/"+''.join(os.path.splitext(os.path.basename(file)))
         print(blob_name)
         #
         blob = BlobClient.from_connection_string(
@@ -27,8 +28,8 @@ def upload_blob_f(container, file, index=0, result=None):
         print(f'Upload succeeded: {blob_name}')
         result[index] = True # example of returning result
     except Exception as e:
-        print(e) # do something useful here
-        result[index] = False # example of returning result
+         print(e) # do something useful here
+         result[index] = False # example of returning result
 
 
 # container: string of container name. This example assumes the container exists.
@@ -52,14 +53,11 @@ def upload_wrapper(container, files):
 #magnus path
 
 
-path = r"C:\Users\tan.j.53\OneDrive - Procter and Gamble\Documents\RAW"
+path = r"C:\Users\tan.j.53\OneDrive - Procter and Gamble\Documents\TCB"
 
+types = ('*.xlsx', '*.xls') # the tuple of file types
+files_grabbed = []
+for files in types:
+    files_grabbed.extend(glob.glob(path+"\**\\"+files,recursive=True))
 
-files=[]
-for f in glob.glob(path+"\**\*.xlsx",recursive=True):
-    files.append(f)
-    print(files)
-    print(f)
-    print(f.rsplit('\\', 2)[-2])
-    print("hi")
-upload_wrapper("ebr-dev",files)
+upload_wrapper("ebr-dev",files_grabbed)
